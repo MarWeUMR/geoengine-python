@@ -19,7 +19,9 @@ class Colorizer():
             min_max: Tuple[int, int],
             n_steps: int = 10,
             default_color: Tuple[int, int, int, int] = (0, 0, 0, 0),
-            no_data_color: Tuple[int, int, int, int] = (0, 0, 0, 0)):
+            no_data_color: Tuple[int, int, int, int] = (0, 0, 0, 0),
+            over: Tuple[int, int, int, int] = None,
+            under: Tuple[int, int, int, int] = None):
         """Initialize the colorizer."""
         # pylint: disable=too-many-arguments
 
@@ -69,6 +71,8 @@ class Colorizer():
         self.__n_steps = n_steps
         self.__default_color = default_color
         self.__no_data_color = no_data_color
+        self.__over = over
+        self.__under = under
 
     def to_query_string(self) -> str:
         """Generate a json dump that is compatible with the geoengine config protocol.
@@ -101,6 +105,8 @@ class Colorizer():
                 "breakpoints": breakpoints,
                 "noDataColor": self.__no_data_color,
                 "defaultColor": self.__default_color,
+                "over": self.__over,
+                "under": self.__under,
             }
         )
 

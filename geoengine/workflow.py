@@ -13,7 +13,8 @@ import urllib.parse
 import json
 
 # TODO: can be imported directly from `typing` with python >= 3.8
-from typing_extensions import TypedDict
+#from typing_extensions import TypedDict
+from typing import TypedDict
 import requests as req
 import geopandas as gpd
 from owslib.util import Authentication, ResponseWrapper
