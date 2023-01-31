@@ -294,6 +294,39 @@ class Workflow:
 
         return VegaLite(vega_spec)
 
+    def train_model(self, bbox: QueryRectangle, timeout: int = 3600):
+        '''
+        Query a workflow and return the machine learning model
+        '''
+
+        if not self.__result_descriptor.is_ml_result():
+            raise MethodNotCalledOnPlotException()
+
+        session = get_session()
+
+        time = urllib.parse.quote(bbox.time_str)
+        spatial_bounds = urllib.parse.quote(bbox.bbox_str)
+        resolution = str(f'{bbox.resolution[0]},{bbox.resolution[1]}')
+
+        # "/xg/d0c5ee9a-391a-5bd8-a84c-3549d53a9ec0?bbox=0%2C-0.3%2C0.2%2C0&crs=EPSG%3A4326&time=2020-01-01T00%3A00%3A00.0Z&spatialResolution=0.1%2C0.1"
+
+        ml_url = f'{session.server_url}/xg/{self}?bbox={spatial_bounds}&crs={bbox.srs}&time={time}'\
+            f'&spatialResolution={resolution}'
+
+        response = req.get(ml_url, headers=session.auth_header, timeout=timeout)
+
+        check_response_for_error(response)
+
+        response_json: JsonType = response.json()
+
+        # assert isinstance(response_json, Dict)
+
+        # vega_spec = json.loads(response_json['data']['vegaString'])
+
+        # print(vega_spec)
+
+        return response_json
+
     def __request_wcs(
         self,
         bbox: QueryRectangle,

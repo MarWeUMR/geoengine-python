@@ -204,6 +204,8 @@ class ResultDescriptor:  # pylint: disable=too-few-public-methods
             return VectorResultDescriptor(response)
         if result_descriptor_type == 'plot':
             return PlotResultDescriptor(response)
+        if result_descriptor_type == 'machineLearning':
+            return MachineLearningResultDescriptor(response)
 
         raise TypeException(
             f'Unknown `ResultDescriptor` type: {result_descriptor_type}')
@@ -228,6 +230,14 @@ class ResultDescriptor:  # pylint: disable=too-few-public-methods
     def is_plot_result(cls) -> bool:
         '''
         Return true if the result is of type plot
+        '''
+
+        return False
+
+    @classmethod
+    def is_ml_result(cls) -> bool:
+        '''
+        Return true if the result is of type machine learning
         '''
 
         return False
@@ -416,6 +426,41 @@ class PlotResultDescriptor(ResultDescriptor):
 
         return {
             'type': 'plot',
+            'spatialReference': self.spatial_reference,
+        }
+
+
+class MachineLearningResultDescriptor(ResultDescriptor):
+    '''
+    A machine learning result descriptor
+    '''
+
+    def __init__(self, response: Dict[str, Any]) -> None:
+        '''Initialize a new `MachineLearningResultDescriptor`'''
+
+        super().__init__(response['spatialReference'])
+
+    def __repr__(self) -> str:
+        '''Display representation of the machine learning result descriptor'''
+        r = 'Machine Learning Result'
+
+        return r
+
+    @classmethod
+    def is_ml_result(cls) -> bool:
+        return True
+
+    @property
+    def spatial_reference(self) -> str:
+        '''Return the spatial reference'''
+
+        return super().spatial_reference
+
+    def to_dict(self) -> Dict[str, Any]:
+        '''Convert the machine learning result descriptor to a dictionary'''
+
+        return {
+            'type': 'machineLearning',
             'spatialReference': self.spatial_reference,
         }
 
