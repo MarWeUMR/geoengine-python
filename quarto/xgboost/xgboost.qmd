@@ -1,0 +1,19 @@
+---
+title: "XGBoost Training Showcase"
+---
+```{python}
+#| tags: [parameters]
+#| echo: false
+from datetime import datetime
+
+import geoengine as ge
+
+ge.initialize("http://localhost:3030")
+
+session = ge.get_session()
+
+
+```
+
+
+{{< include train.qmd >}}

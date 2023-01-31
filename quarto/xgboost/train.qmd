@@ -1,0 +1,64 @@
+```{python}
+#| echo: true
+workflow = ge.register_workflow({
+	"type": "MachineLearning",
+	"operator": {
+		"type": "XgboostTrainingOperator",
+		"params": {
+			"modelStorePath": "data",
+            "noDataValue": -1000.,
+            "params": {
+                "n_estimators": "1"
+            }
+		},
+		 "sources": {
+            "source": [
+                {
+                "type": "GdalSource",
+                "params": {
+                    "data": {
+                        "type": "internal",
+                        "datasetId": "9ee3619e-d0f9-4ced-9c44-3d407c3aed69"
+                    }
+                }
+            },
+                {
+                "type": "GdalSource",
+                "params": {
+                    "data": {
+                        "type": "internal",
+                        "datasetId": "9ee3619e-d0f9-4ced-9c44-3d407c3aed69"
+                    }
+                }
+            },
+                {
+                "type": "GdalSource",
+                "params": {
+                    "data": {
+                        "type": "internal",
+                        "datasetId": "9ee3619e-d0f9-4ced-9c44-3d407c3aed69"
+                    }
+                }
+            }
+            ]
+        },
+            },
+})
+    
+workflow
+```
+
+```{python}
+#| echo: true
+
+time = datetime.strptime(
+    '2020-01-01T00:00:00.0Z', "%Y-%m-%dT%H:%M:%S.%f%z")
+
+res = workflow.train_model(
+    ge.QueryRectangle(
+        [0,-0.3,0.2,0],
+        [time, time]
+        )
+)
+res
+```
